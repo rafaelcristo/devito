@@ -120,4 +120,4 @@ jobs:
 
     - name: Test with pytest
       run: |
-        $RUN_CMD pytest tests/test_roundoff.py
+        $RUN_CMD pytest --maxfail 100 tests/test_roundoff.py
