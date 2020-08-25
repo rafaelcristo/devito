@@ -356,7 +356,8 @@ class GNUCompiler(Compiler):
         super(GNUCompiler, self).__init__(*args, **kwargs)
 
         self.cflags += ['-march=native', '-Wno-unused-result', '-Wno-unused-variable',
-                        '-Wno-unused-but-set-variable', '-ffast-math', '-fno-unsafe-math-optimizations']
+                        '-Wno-unused-but-set-variable', '-ffast-math',
+                        '-fno-unsafe-math-optimizations']
 
         language = kwargs.pop('language', configuration['language'])
         try:
