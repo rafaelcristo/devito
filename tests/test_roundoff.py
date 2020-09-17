@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from devito import Grid, Constant, TimeFunction, Eq, Operator
+from devito import Grid, Constant, TimeFunction, Eq, Operator, configuration
 
 
 class TestRoundoff(object):
@@ -15,6 +15,9 @@ class TestRoundoff(object):
         """
         Test logistic map with forward term that should cancel.
         """
+        configuration['safe-math'] = True
+        configuration['log-level'] = 'DEBUG'
+
         iterations = 10000
         r = Constant(name='r', dtype=dtype)
         r.data = dtype(dat)
@@ -50,16 +53,20 @@ class TestRoundoff(object):
         """
         Test logistic map with backward term that should cancel.
         """
+        configuration['safe-math'] = True
+        configuration['log-level'] = 'DEBUG'
+
         iterations = 10000
-        r = Constant(name='r')
+        r = Constant(name='r', dtype=dtype)
         r.data = dtype(dat)
         s = dtype(0.1)
 
-        grid = Grid(shape=(2, 2), extent=(1, 1))
+        grid = Grid(shape=(2, 2), extent=(1, 1), dtype=dtype)
         dt = grid.stepping_dim.spacing
 
-        f0 = TimeFunction(name='f0', grid=grid, time_order=2)
-        f1 = TimeFunction(name='f1', grid=grid, time_order=2, save=iterations+2)
+        f0 = TimeFunction(name='f0', grid=grid, time_order=2, dtype=dtype)
+        f1 = TimeFunction(name='f1', grid=grid, time_order=2, save=iterations+2,
+                          dtype=dtype)
 
         lmap0 = Eq(f0.forward, r*f0*(1.0-f0+(1.0/s)*dt*f0.backward-f0.backward))
         lmap1 = Eq(f1.forward, r*f1*(1.0-f1+(1.0/s)*dt*f1.backward-f1.backward))
@@ -84,6 +91,9 @@ class TestRoundoff(object):
         """
         Test logistic map with forward and backward terms that should cancel.
         """
+        configuration['safe-math'] = True
+        configuration['log-level'] = 'DEBUG'
+
         iterations = 10000
         r = Constant(name='r', dtype=dtype)
         r.data = dtype(dat)
@@ -122,6 +132,9 @@ class TestRoundoff(object):
         """
         Test logistic map with 2nd derivative term that should cancel.
         """
+        configuration['safe-math'] = True
+        configuration['log-level'] = 'DEBUG'
+
         iterations = 10000
         r = Constant(name='r', dtype=dtype)
         r.data = dtype(0.5*dat)
