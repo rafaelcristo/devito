@@ -85,6 +85,10 @@ def build_iterators(mapper):
                     md = ModuloDimension(d, d.root + i, k._time_size, origin=d + i)
                     if md not in values:
                         values.append(md)
+            elif d.is_Modulo:
+                values = iterators.setdefault(d.parent, [])
+                if d not in values:
+                    values.append(d)
             elif d.is_Conditional:
                 # There are no iterators associated to a ConditionalDimension
                 continue
